@@ -23,3 +23,38 @@ def create_tensorboard_callback(dir_name, experiment_name):
     print(f"Saving TensorBoard log files to: {log_dir}")
 
     return tensorboard_callback
+
+def get_line(file_name):
+    with open(file_name, "r") as f:
+        return f.readlines()
+    
+def preprocess_text_with_line_number(file_name):
+    input_line = get_line(file_name)
+    abstract_line = ""
+    abstract_sample = []
+    
+    for line in input_line:
+        ### New id
+        if line.startswith("###"):
+            abstract_id = line
+            abstract_line = "" # Reset before proceed to next
+        ### Start processing the data
+        elif line.isspace():
+            abstract_line_split = abstract_line.splitlines()
+
+            for abstract_line_number, abstract_line in enumerate(abstract_line_split):
+                line_data = {}
+                
+                target_text_split = abstract_line.split("\t")
+                
+                line_data["target"] = target_text_split[0]
+                line_data["text"] = target_text_split[1].lower()
+                line_data["line_number"] = abstract_line_number
+                line_data["total_line"] = len(abstract_line_split) - 1
+
+                abstract_sample.append(line_data)
+        ### Collecting/ merging the data per id
+        else:
+            abstract_line += line
+  
+    return abstract_sample
