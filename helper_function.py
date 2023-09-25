@@ -1,6 +1,9 @@
 import tensorflow as tf
 import datetime
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+import zipfile
+import os
+import matplotlib.pyplot as plt
 
 def performance_metrics(y_true, y_pred):
     model_accuracy = accuracy_score(y_true, y_pred) * 100
@@ -58,3 +61,36 @@ def preprocess_text_with_line_number(file_name):
             abstract_line += line
   
     return abstract_sample
+
+def plot_loss_curves(history): 
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    accuracy = history.history['accuracy']
+    val_accuracy = history.history['val_accuracy']
+
+    epochs = range(len(history.history['loss']))
+
+    # Plot loss curve
+    plt.plot(epochs, loss, label = 'training_loss')
+    plt.plot(epochs, val_loss, label = 'val_loss')
+    plt.title('Loss')
+    plt.xlabel('Epochs')
+    plt.legend()
+
+    # Plot accuracy curve
+    plt.figure()
+    plt.plot(epochs, accuracy, label = 'training_accuracy')
+    plt.plot(epochs, val_accuracy, label = 'val_accuracy')
+    plt.title('Accuracy')
+    plt.xlabel('Epochs')
+    plt.legend();
+
+def unzip_data(file_name):
+    zip_ref = zipfile.ZipFile(file_name, "r")
+    zip_ref.extractall()
+    zip_ref.close()
+
+def walk_through_dir(dir_path):
+    for dirpath, dirnames, filenames in os.walk(dir_path):
+        print(f"There are {len(dirnames)} directories and {len(filenames)} images in '{dirpath}'.")
