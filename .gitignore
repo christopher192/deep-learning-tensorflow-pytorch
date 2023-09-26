@@ -3,4 +3,5 @@ data
 image_data
 model_log
 saved_model
+saved_weight
 __pycache__
