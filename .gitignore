@@ -5,4 +5,5 @@ model_log
 saved_model
 saved_weight
 tensorflow_hub
+model_checkpoint
 __pycache__
