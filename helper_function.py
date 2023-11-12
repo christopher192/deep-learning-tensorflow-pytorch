@@ -126,3 +126,29 @@ def compare_history(original_history, new_history, initial_epochs = 5):
     plt.title('Training and Validation Loss')
     plt.xlabel('epoch')
     plt.show()
+    
+def plot_decision_boundary(model: torch.nn.Module, x: torch.Tensor, y: torch.Tensor):
+    model.to("cpu")
+    x, y = x.to("cpu"), y.to("cpu")
+
+    x_min, x_max = x[:, 0].min() - 0.1, x[:, 0].max() + 0.1
+    y_min, y_max = x[:, 1].min() - 0.1, x[:, 1].max() + 0.1
+    xx, yy = np.meshgrid(np.linspace(x_min, x_max, 101), np.linspace(y_min, y_max, 101))
+
+    x_to_pred_on = torch.from_numpy(np.column_stack((xx.ravel(), yy.ravel()))).float()
+
+    model.eval()
+    
+    with torch.inference_mode():
+        y_logit = model(x_to_pred_on)
+
+    if len(torch.unique(y)) > 2:
+        y_pred = torch.softmax(y_logits, dim = 1).argmax(dim = 1)
+    else:
+        y_pred = torch.round(torch.sigmoid(y_logit))
+
+    y_pred = y_pred.reshape(xx.shape).detach().numpy()
+    plt.contourf(xx, yy, y_pred, cmap = plt.cm.RdYlBu, alpha = 0.7)
+    plt.scatter(x[:, 0], x[:, 1], c = y, s = 40, cmap = plt.cm.RdYlBu)
+    plt.xlim(xx.min(), xx.max())
+    plt.ylim(yy.min(), yy.max())
