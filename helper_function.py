@@ -4,6 +4,8 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 import zipfile
 import os
 import matplotlib.pyplot as plt
+import torch
+import numpy as np
 
 def performance_metrics(y_true, y_pred):
     model_accuracy = accuracy_score(y_true, y_pred) * 100
@@ -152,3 +154,13 @@ def plot_decision_boundary(model: torch.nn.Module, x: torch.Tensor, y: torch.Ten
     plt.scatter(x[:, 0], x[:, 1], c = y, s = 40, cmap = plt.cm.RdYlBu)
     plt.xlim(xx.min(), xx.max())
     plt.ylim(yy.min(), yy.max())
+    
+def plot_prediction(train_data, train_label, test_data, test_label, prediction = None):
+    plt.figure(figsize = (10, 7))
+    plt.scatter(train_data, train_label, c = "b", s = 4, label = "Training data")
+    plt.scatter(test_data, test_label, c = "g", s = 4, label = "Testing data")
+
+    if predictions is not None:
+        plt.scatter(test_data, prediction, c = "r", s = 4, label = "Prediction")
+
+    plt.legend(prop = {"size" : 14})
