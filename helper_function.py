@@ -164,3 +164,9 @@ def plot_prediction(train_data, train_label, test_data, test_label, prediction =
         plt.scatter(test_data, prediction, c = "r", s = 4, label = "Prediction")
 
     plt.legend(prop = {"size" : 14})
+    
+def accuracy_function(y_true, y_pred):
+    correct = torch.eq(y_true, y_pred).sum().item()
+    acc = (correct / len(y_pred)) * 100
+    
+    return acc
