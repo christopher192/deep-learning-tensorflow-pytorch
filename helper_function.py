@@ -145,7 +145,7 @@ def plot_decision_boundary(model: torch.nn.Module, x: torch.Tensor, y: torch.Ten
         y_logit = model(x_to_pred_on)
 
     if len(torch.unique(y)) > 2:
-        y_pred = torch.softmax(y_logits, dim = 1).argmax(dim = 1)
+        y_pred = torch.softmax(y_logit, dim = 1).argmax(dim = 1)
     else:
         y_pred = torch.round(torch.sigmoid(y_logit))
 
@@ -160,7 +160,7 @@ def plot_prediction(train_data, train_label, test_data, test_label, prediction =
     plt.scatter(train_data, train_label, c = "b", s = 4, label = "Training data")
     plt.scatter(test_data, test_label, c = "g", s = 4, label = "Testing data")
 
-    if predictions is not None:
+    if prediction is not None:
         plt.scatter(test_data, prediction, c = "r", s = 4, label = "Prediction")
 
     plt.legend(prop = {"size" : 14})
@@ -170,3 +170,28 @@ def accuracy_function(y_true, y_pred):
     acc = (correct / len(y_pred)) * 100
     
     return acc
+
+def pytorch_plot_loss_curve(result): 
+    train_loss = result["train_loss"]
+    test_loss = result["test_loss"]
+
+    train_accuracy = result["train_accuracy"]
+    test_accuracy = result["test_accuracy"]
+
+    epoch_number = range(len(result["train_loss"]))
+
+    plt.figure(figsize = (15, 7))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(epoch_number, train_loss, label = "train_loss")
+    plt.plot(epoch_number, test_loss, label = "test_loss")
+    plt.title("Loss")
+    plt.xlabel("Epoch")
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(epoch_number, train_accuracy, label = "train_accuracy")
+    plt.plot(epoch_number, test_accuracy, label = "test_accuracy")
+    plt.title("Accuracy")
+    plt.xlabel("Epoch")
+    plt.legend()

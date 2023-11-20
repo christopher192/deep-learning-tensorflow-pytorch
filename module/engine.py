@@ -42,10 +42,10 @@ def model_testing(model: torch.nn.Module, dataloader: torch.utils.data.DataLoade
             test_loss += loss.item()
 
             test_pred_label = test_pred_logit.argmax(dim = 1)
-            test_acc += ((test_pred_label == y).sum().item() / len(test_pred_label))
+            test_accuracy += ((test_pred_label == y).sum().item() / len(test_pred_label))
 
     test_loss = test_loss / len(dataloader)
-    test_accuracy = test_acc / len(dataloader)
+    test_accuracy = test_accuracy / len(dataloader)
 
     return test_loss, test_accuracy
 
@@ -69,9 +69,9 @@ def start_training(model: torch.nn.Module, train_dataloader: torch.utils.data.Da
         print(
           f"Epoch: {epoch + 1} | "
           f"train_loss: {train_loss:.4f} | "
-          f"train_acc: {train_accuracy:.4f} | "
+          f"train_accuracy: {train_accuracy:.4f} | "
           f"test_loss: {test_loss:.4f} | "
-          f"test_acc: {test_accuracy:.4f}"
+          f"test_accuracy: {test_accuracy:.4f}"
         )
 
         result["train_loss"].append(train_loss)
